@@ -22,37 +22,37 @@ def main():
 
     # training argument
     parser.add_argument('--batch_size', default=256, type=float)
-    parser.add_argument('--nb_epoch', default=400, type=int)
+    parser.add_argument('--nb_epoch', default=2000, type=int)
     parser.add_argument('--val_ratio', default=0.1, type=float)
     parser.add_argument('--gpu_fraction', default=0.6, type=float)
-    parser.add_argument('--vocab_size', default=20000, type=int)
-    parser.add_argument('--max_length', default=200,type=int)
-    parser.add_argument('--patience', default = 10, type=int)
+    parser.add_argument('--vocab_size', default=50000, type=int)
+    parser.add_argument('--max_length', default=400,type=int)
+    parser.add_argument('--patience', default = 30, type=int)
     
     # model parameter
     parser.add_argument('--loss_function', default='binary_crossentropy')
     parser.add_argument('--cell', default='LSTM', choices=['LSTM','GRU'])
     parser.add_argument('-num_lay', '--num_layers', default=2, type=int)
     parser.add_argument('-emb_dim', '--embedding_dim', default=256, type=int)
-    parser.add_argument('-hid_siz', '--hidden_size', default=512, type=int)
-    parser.add_argument('--pretrain_emb', default=False, type=bool)
+    parser.add_argument('-hid_siz', '--hidden_size', default=400, type=int)
+    parser.add_argument('--pretrain_emb', default=True, type=bool)
     parser.add_argument('--emb_matrix', default='cbowemb.npz')
 #    parser.add_argument('--dropout_rate', default=0.3, type=float)
     parser.add_argument('--keep_prob', default=1.0, type=float)
     parser.add_argument('-lr','--learning_rate', default=0.013,type=float)
-    parser.add_argument('--threshold', default=0.7,type=float)
+    parser.add_argument('--threshold', default=0.5,type=float)
     # output path for your prediction
     parser.add_argument('--result_path', default='result.csv',)
     
     # put model in the same directory
     parser.add_argument('--load_model', default = None)
-    parser.add_argument('--load_token', default = None, type=bool)
+    parser.add_argument('--load_token', default = True, type=bool)
     parser.add_argument('--save_dir', default = 'model/')
     # log dir for tensorboard
     parser.add_argument('--log_dir', default='log_dir/')
     args = parser.parse_args()
 
-    train_path = 'data/ohca_clean.txt'
+    train_path = 'data/ohca_scripts.txt'
     test_path = 'data/testing_data.txt'
     
     save_path = 'token/'
@@ -124,7 +124,7 @@ def main():
     #accuracy for validation
     accuracy = rnnmodel.accuracy(y_, y_predict)
 
-    #initial state
+    #initial state of LSTM
     init_state = rnnmodel.initial_state
     
     # merge the write out histogram plots (tensorboard)
@@ -243,8 +243,8 @@ def main():
                     
                     train_writer.add_summary(summary, generation_num)
                     outputs_ = routputs.eval( feed_dict=train_dict)
-                    #if (ix==1):
-                        #print(X_batch[:10,:])
+                    if (ix==1):
+                        print(X_batch.shape)
                         #print("shape of outputs is {}".format(outputs_[:,-1].shape))
                     
                     if (generation_num %10 ==0):

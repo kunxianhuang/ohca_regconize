@@ -85,7 +85,7 @@ def generate_batch_cbow(data, data_index, seq_index, batch_size, num_skips=2, sk
 def cbow_main():
     parser = argparse.ArgumentParser(description='CBOW word embedding')
     #training argument
-    parser.add_argument('--vocab_size', default=15000, type=int)
+    parser.add_argument('--vocab_size', default=50000, type=int)
     parser.add_argument('-emb_dim', '--embedding_dim', default=256, type=int)
     parser.add_argument('--gpu_fraction', default=0.8, type=float)
     parser.add_argument('--skip_window', default=2, type=int)
@@ -93,7 +93,7 @@ def cbow_main():
     parser.add_argument('--batch_size', default=512, type=int)
     parser.add_argument('--learning_rate', default=0.01, type=float)
     parser.add_argument('--log_dir', default='log_embdir/')
-    parser.add_argument('--nsteps', default=1000000, type=int)
+    parser.add_argument('--nsteps', default=5000000, type=int)
     
     # put model in the same directory                                                        
     parser.add_argument('--load_model', default = None)
@@ -157,10 +157,10 @@ def cbow_main():
 
     # fill all sequence data into a list
     seq_data = []
-    #seq_data.extend(dm.get_data('ml_data')[0])
+    seq_data.extend(dm.get_data('ml_data')[0])
     seq_data.extend(dm.get_data('script_data')[0])
-    #seq_data.extend(dm.get_data('pylady_data')[0])
-    #seq_data.extend(dm.get_data('pttgossi_data')[0])
+    seq_data.extend(dm.get_data('pylady_data')[0])
+    seq_data.extend(dm.get_data('pttgossi_data')[0])
 
     #seq_data.extend(dm.get_data('test_data')[0])
     
@@ -175,7 +175,7 @@ def cbow_main():
     valid_size = 16  # Random set of words to evaluate similarity on.
     valid_window = 100  # Only pick dev samples in the head of the distribution.
     #valid_examples = np.random.choice(valid_window, valid_size, replace=False)
-    valid_text = ["喘" ,"呼吸" ,"醫療" ,"沒有" ,"意識" ,"起伏" ,"電話" ,"臉色" ,"倒下" ,"躺" ,"昏倒", "睡著" ,"清醒" ,"不" ,"沒有" ,"小聲"]
+    valid_text = ["喘" ,"呼吸" ,"白沫" ,"沒有" ,"意識" ,"倒下" ,"電話" ,"臉色" ,"起伏" ,"睡著" ,"昏倒", "溺水","清醒" ,"不" ,"微弱" ,"很"]
     #print(dm.tokenizer.texts_to_sequences(valid_text))
     valid_examples = np.array([words[0] for words in (dm.tokenizer.texts_to_sequences(valid_text)) if len(words)>0])
     #print(valid_examples)
