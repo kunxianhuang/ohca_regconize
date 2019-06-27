@@ -1,8 +1,8 @@
 # ohca_regconize
 ### requirements of python packages
 https://github.com/kunxianhuang/ohca_regconize/blob/master/requirements.txt
-### stop words
-file "chinese" should put in ntlk stopwords
+* stop words
+file "chinese" should put in nltk stopwords
 ### Training
 * command as:
 
