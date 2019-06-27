@@ -1,13 +1,14 @@
-# ohca_regconize
-* Training: 
+### ohca_regconize
+# Training: 
+* command as:
 
-\t command as:
-\t ``python3 text_ohcarecog_train.py model train ``
-* Evaluation: 
+ ``python3 text_ohcarecog_train.py model train ``
+# Evaluation: 
 
-\t command as:
-\t ``python3 text_ohcarecog_eval.py --test_file=[TEST_FILE] --outfile=[OUTFILE]`` 
+* command as:
 
-\t [TEST_FILE] default is data/ohca_test1.txt
+``python3 text_ohcarecog_eval.py --test_file=[TEST_FILE] --outfile=[OUTFILE]`` 
 
-\t [OUTFILE]   defualt is data/ohca_testout.txt
+[TEST_FILE] default is data/ohca_test1.txt
+
+[OUTFILE]   defualt is data/ohca_testout.txt
