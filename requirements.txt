@@ -1,0 +1,6 @@
+tensorflow>=1.10
+nltk>=3.2.2
+jieba>=0.39
+numpy>=1.15
+progressbar>=3.34.3
+argparse>=1.1
