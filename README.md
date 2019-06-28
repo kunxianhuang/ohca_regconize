@@ -12,7 +12,7 @@ file "chinese" should put in nltk stopwords
 ### Testing
 * command as:
 
-``python text_ohcarecog_train.py model test --load_model=True --testfile=[TEST_FILE]``
+``python3 text_ohcarecog_train.py model test --load_model=True --testfile=[TEST_FILE]``
 
 [TEST_FILE] default is data/ohca_scripts.txt , it is labeled test file
 ### Evaluation 
