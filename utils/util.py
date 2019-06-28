@@ -140,6 +140,9 @@ class DataManager(object):
     def get_data(self,name):
         return self.data[name][0]
 
+    def get_labeldata(self,name):
+        return (self.data[name][0],self.data[name][1])
+    
     # split data to two part by a specified ratio
     #  name  : string, same as add_data
     #  ratio : float, ratio to split

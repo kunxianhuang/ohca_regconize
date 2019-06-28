@@ -50,10 +50,15 @@ def main():
     parser.add_argument('--save_dir', default = 'model/')
     # log dir for tensorboard
     parser.add_argument('--log_dir', default='log_dir/')
+    # testing output
+    parser.add_argument('--testfile', default='data/ohca_scripts.txt')
+    parser.add_argument('--testout', default='data/script_test.txt')
+    
     args = parser.parse_args()
 
+    
     train_path = 'data/ohca_scripts.txt'
-    test_path = 'data/testing_data.txt'
+    test_path  = args.testfile
     
     save_path = 'token/'
     #load token path
@@ -73,7 +78,7 @@ def main():
     if args.action == 'train':
         dm.add_data('train_data', train_path, with_label=True)
     else:
-        dm.add_data('test_data', test_path, with_label=False)
+        dm.add_data('test_data', test_path, with_label=True) # now the test will have label 
 
             
     # prepare tokenizer
@@ -153,10 +158,9 @@ def main():
         print("Shape of X is {}, and y is {}".format(np.array(X).shape, np.array(Y).shape))
 
     elif args.action == 'test' :
-        X = dm.get_data('test_data')
+        (X,Y) = dm.get_labeldata('test_data')
         print("Load test data (shape {})".format(X.shape))
         #raise Exception ('Implement your testing function')
-
         
     init = tf.global_variables_initializer()
     
@@ -195,36 +199,7 @@ def main():
             for e in range(args.nb_epoch):
                 state = sess.run([init_state])
                 semi_preds = []
-                """
-                # add semi-data for the training
-                if (args.action == 'semi' and e%2==0):
-                    n_semi_entries = int(len(semi_all_X)/args.batch_size)+1
-                    widgets = ["Simi-training events batches:", pb.Percentage(), pb.Bar(), pb.ETA()]
-                    pbar = pb.ProgressBar(maxval=n_semi_entries, widgets=widgets).start()
-
-                    #isemi_batch = 0
-                    # label the semi-data
-                    for ise, X_batch in enumerate(get_batches_nolabel(semi_all_X, args.batch_size)):
-                        pbar.update(ise+1)
-                        semi_dict = {X_:X_batch, init_state: state}
-                        semi_pred = sess.run(y_predict, feed_dict=semi_dict)
-                        #print("shape of semi_pred for each batch is {}".format(semi_pred.shape))
-                        semi_preds.extend(semi_pred)
-                        #isemi_batch+=1
-                    
-                        
-                    pbar.finish()
-                    #extract first len(semi_all_X) elements
-                    n_semi = len(semi_all_X)
-                    semi_preds = semi_preds[:n_semi]
-                    print("shape of semi_preds is {}".format(np.array(semi_preds).shape))
-                        
-                    semi_X, semi_Y = dm.get_semi_data('semi_data', semi_preds, args.threshold, args.loss_function)
-                    #combine labeled data with semi-data to training data
-                    X_train = np.concatenate((semi_X, X))
-                    Y_train = np.concatenate((semi_Y, Y))
-                    print("shape of semi+train for each batch is X: {} y: {}".format(semi_X.shape, semi_Y.shape))
-                """    
+                
                 if (e==0):
                     # hard copy
                     X_train = X.copy()
@@ -307,8 +282,24 @@ def main():
             
         #testing
         elif (args.action=='test'):
-            
-            raise Exception ('Implement your testing function')        
+            # hard copy
+            X_test = X.copy()
+            Y_test = Y.copy()
+            state = sess.run([init_state])
+            with open(args.testout, 'w+') as outfile:
+                
+                for ix, (X_batch,y_batch) in enumerate(get_batches(X_test,Y_test, args.batch_size),1):
+                    
+                    test_dict = {X_:X_batch, y_:y_batch, keep_prob:args.keep_prob, init_state: state}
+                    #for each traing generation, reload zero initial states
+                
+                    _, y_prebatch, accu_train = sess.run([train_op, y_predict, accuracy], feed_dict=test_dict)
+                
+                    for y_true, y_pre in zip(y_batch,y_prebatch):
+                        strout = "%d\t%f\n" %(y_true, y_pre)
+                        outfile.write(strout)
+            print("Testing finish, write out file {}".format(args.testout))
+            #raise Exception ('Implement your testing function')        
         
     return
 
