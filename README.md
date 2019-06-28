@@ -8,6 +8,11 @@ file "chinese" should put in nltk stopwords
 
  ``python3 text_ohcarecog_train.py model train ``
 * training data is at data/ohca_scripts.txt
+
+### Testing
+* command as:
+``python text_ohcarecog_train.py model test --load_model=True --testfile=[TEST_FILE]``
+[TEST_FILE] default is data/ohca_scripts.txt , it is labeled test file
 ### Evaluation 
 
 * command as:
