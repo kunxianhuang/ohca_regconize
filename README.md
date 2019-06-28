@@ -17,7 +17,7 @@ file "chinese" should put in nltk stopwords
 
 * command as:
 
-``python3 text_ohcarecog_eval.py --test_file=[TEST_FILE] --outfile=[OUTFILE]`` 
+ ``python3 text_ohcarecog_eval.py --test_file=[TEST_FILE] --outfile=[OUTFILE]`` 
 
 [TEST_FILE] default is data/ohca_test1.txt , you should use only "single" call
 
