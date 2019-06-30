@@ -2,7 +2,7 @@
 ### requirements of python packages
 https://github.com/kunxianhuang/ohca_regconize/blob/master/requirements.txt
 * stop words
-file "chinese" should put in nltk stopwords
+file "chinese" should put in nltk stopwords folder
 ### Training
 * command as:
 
